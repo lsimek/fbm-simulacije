@@ -1,0 +1,633 @@
+\documentclass[12pt]{scrartcl}
+\addtokomafont{disposition}{\boldmath}
+% \documentclass[12pt]{article}
+% \usepackage[v1]{subfiles} %%
+
+\usepackage[utf8]{inputenc}
+% \usepackage[croatian]{babel}
+\usepackage{datetime}
+\usepackage[a4paper,margin=0.75in]{geometry}
+\setlength\baselineskip{15pt}
+
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{csquotes}
+\usepackage{tikz}
+\usepackage{arydshln}
+\pagenumbering{gobble}
+\usepackage{float}
+\usepackage[dvipsnames]{xcolor}
+%\usepackage{mathptmx} % times new roman
+% \usepackage{mathpazo} % tex gyre pagella
+% \usepackage{baskervaldx}
+% \usepackage[baskervaldx]{newtxmath}
+% \usepackage[T1]{fontenc}
+% \fontseries{ub}\selectfont
+
+\usepackage{breqn}
+\usepackage{thmtools}
+\usepackage{multirow}
+\usepackage{mathtools}
+\usepackage[unicode]{hyperref}
+
+\usepackage{booktabs}
+\usepackage{listings}
+
+%%%
+
+% Save original macros
+% --------------------
+\usepackage{letltxmacro}
+
+\LetLtxMacro\OriginalLongrightarrow\Longrightarrow
+\LetLtxMacro\OriginalLongleftarrow\Longleftarrow
+
+% Implement new macros
+% --------------------
+\usepackage{trimclip}
+\DeclareRobustCommand\Longrightarrow{\NewRelbar\joinrel\Rightarrow}
+\DeclareRobustCommand\Longleftarrow{\Leftarrow\joinrel\NewRelbar}
+
+\makeatletter
+\DeclareRobustCommand\NewRelbar{%
+  \mathrel{%
+    \mathpalette\@NewRelbar{}%
+  }%
+}
+\newcommand*\@NewRelbar[2]{%
+  % #1: math style
+  % #2: unused
+  \sbox0{$#1=$}%
+  \sbox2{$#1\Rightarrow\m@th$}%
+  \sbox4{$#1\Leftarrow\m@th$}%
+  \clipbox{0pt 0pt \dimexpr(\wd2-.6\wd0) 0pt}{\copy2}%
+  \kern-.2\wd0 %
+  \clipbox{\dimexpr(\wd4-.6\wd0) 0pt 0pt 0pt}{\copy4}%
+}
+\makeatother
+%%%
+
+
+\definecolor{seagreen}{HTML}{21b2aa}
+\definecolor{magenta}{HTML}{b2217f}
+\definecolor{gold}{HTML}{ca9520}
+\definecolor{red}{HTML}{da272f}
+\definecolor{blue}{HTML}{4682b4}
+\definecolor{navy}{HTML}{7b000b} %% orig 06038d % onda 7b0000 % onda 7b000b
+\definecolor{nred}{HTML}{650015}
+\definecolor{ngreen}{HTML}{156515}
+
+%% 
+\definecolor{highlightcolor}{named}{ngreen}
+\addtokomafont{disposition}{\color{highlightcolor}}
+\renewcommand{\emph}[1]{\textbf{\textcolor{highlightcolor}{#1}}}
+%%
+
+\definecolor{codebg}{HTML}{f0f0f0}
+\definecolor{commentfg}{HTML}{333333}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{codebg},
+	commentstyle=\color{commentfg},
+	keywordstyle=\color{navy},
+	stringstyle=\color{commentfg},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=none,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=2
+}
+\lstset{style=mystyle}
+
+\hypersetup{
+    colorlinks,
+    linkcolor=highlightcolor,
+    citecolor=highlightcolor,
+    urlcolor=highlightcolor
+}
+
+\usepackage{enumitem}
+\makeatletter
+\providecommand*{\blx@noerroretextools}{}
+\makeatother
+
+\usepackage[
+%	style=alphabetic,
+	style=numeric,
+	giveninits
+	% firstinits=true,
+	% terseinits=true,
+	% giveninits=true
+]{biblatex}
+%\addbibresource{literatura.bib}
+\let\oldcite\cite
+\renewcommand{\cite}[2][]{%
+    \def\tmp{#1}%
+    \ifx\tmp\empty
+        \mbox{\oldcite{#2}}%
+    \else
+        \mbox{\oldcite[\tmp]{#2}}%
+    \fi
+}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.15}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+	
+\usepackage[section]{placeins}
+\declaretheorem{teorem}
+% \numberwithin{teorem}{subsection}
+% \numberwithin{equation}{section}
+% \numberwithin{figure}{section}
+% \numberwithin{table}{section}
+\declaretheorem[sibling=teorem, style=plain]{lemma}
+\declaretheorem[style=remark, sibling=teorem]{note}
+%\declaretheorem[style=remark, sibling=teorem]{komentar*}
+\declaretheorem[style=definition, sibling=teorem]{definition}
+\declaretheorem[sibling=teorem]{corollary}
+% \declaretheorem[style=remark, sibling=teorem]{zadatak}
+\declaretheorem[sibling=teorem]{proposition}
+\declaretheorem[sibling=teorem]{example}
+\declaretheorem[sibling=teorem]{problem}
+\declaretheorem[sibling=teorem]{exercise}
+
+\newcommand{\ub}{\rightarrow \infty}
+\newcommand{\un}{\rightarrow 0}
+% \newcommand{\norm}[1]{\left\lVert#1\right\rVert} 
+% \newcommand{\given}{\, \middle\vert \,}
+\newcommand{\given}{\, \vert \,}
+\newcommand{\st}{\, \colon \,}
+\newcommand{\D}{\,\mathrm d}
+\newcommand{\ani}{{^\perp}}
+\newcommand{\ran}{\mathrm{ran}\,}
+\newcommand{\bop}{\mathrm{B}}
+% \newcommand{\skp}[2]{\left\langle {#1}, {#2}  \right\rangle}
+\newcommand{\jpod}{\stackrel{\mathrm d}{=}}
+\newcommand{\jgs}{\stackrel{\mathrm{g.s.}}{=\joinrel=}}
+\newcommand{\jas}{\stackrel{\mathrm{a.s.}}{=\joinrel=}}
+%\newcommand{\jzbog}[1]{\stackrel{\eqref{#1}}{=}}
+\newcommand{\wkonv}{\Rightarrow}
+% \newcommand{\stackrelgd}[2]{\stackrel{\stackrel{ {#1}} {\longrightarrow}} { {\scriptstyle #2} } }
+\newcommand{\stackrell}[2]{\stackrel{\scriptstyle {#1}}{#2}}
+\newcommand{\konvp}{\stackrel{\mathbb P}{\longrightarrow}}
+\newcommand{\konvw}{\stackrel{\mathrm w}{\longrightarrow}}
+\newcommand{\konvd}{\stackrel{\mathrm d}{\longrightarrow}}
+\newcommand{\konvgs}{\stackrel{\mathrm{g.s.}}{\longrightarrow}}
+\newcommand{\konvas}{\stackrel{\mathrm{a.s.}}{\longrightarrow}}
+\newcommand{\konvv}{\stackrel{\mathrm{v}}\longrightarrow}
+\newcommand{\konvL}[1]{\stackrel{\L^{#1} }\longrightarrow}
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\var}{Var}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\olspan}{\overline{span}}
+\DeclareMathOperator{\tg}{tg}
+\DeclareMathOperator{\ctg}{ctg}
+\DeclareMathOperator{\arctg}{arctg}
+\DeclareMathOperator{\Arsh}{Arsh}
+\DeclareMathOperator{\discont}{discont}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\cl}{Cl}
+\DeclareMathOperator{\dist}{d}
+\DeclareMathOperator{\re}{Re}
+\let\im\relax
+\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\sgn}{sgn}
+% \DeclareMathOperator{\ln}{\ln}
+
+\newcommand{\ol}[1]{\overline{#1}}
+\newcommand{\wh}[1]{\widehat{#1}}
+\newcommand{\wt}[1]{\widetilde{#1}}
+\renewcommand{\th}[1]{\hat{#1}} % drukciji hat za tekst?
+% \newcommand{\eqdef}{\ {=\colon} \ } 
+% \newcommand{\defeq}{\ {\colon\!=} \ }
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\Ptrans}{\P}  % trazicijska funkcija Markovljevog procesa
+\newcommand{\E}{\mathbb{E}}
+\def\B{\mathrm{B}}
+\def\K{\mathrm{K}}
+\def\M{\mathrm{M}}
+\def\CC{\mathrm{C}}
+\def\RR{\mathrm{R}}
+\def\H{\mathcal{H}}
+\def\K{\mathcal{K}}
+% \def\Z{\mathcal{Z}}
+\def\S{\mathcal{S}}
+\def\T{\mathcal{T}}
+\def\U{\mathcal{U}}
+
+\newcommand{\cz}{Calder\' on--Zygmund}
+\newcommand{\holder}{H\" older}
+\newcommand{\cadlag}{c\` adl\` ag}
+\newcommand{\levy}{L\' evy}
+\newcommand{\ito}{It\= o}
+\def\L{\mathrm{L}}
+\def\w{\mathrm{w}}
+
+%%
+% \newcommand{\oo}[1]{\left\langle {#1} \right\rangle}
+% \newcommand{\oc}[1]{\left\langle {#1} \right]}
+% \newcommand{\co}[1]{\left[ {#1} \right\rangle}
+% \newcommand{\cc}[1]{\left[ {#1} \right]}
+
+% \newcommand{\ob}[1]{\left( {#1} \right)}
+% \newcommand{\ug}[1]{\left[ {#1} \right]}
+% \newcommand{\vit}[1]{\left\{ {#1} \right\}}
+\DeclarePairedDelimiter{\vit}{\{}{\}}
+\let\oldvit\vit
+\renewcommand{\vit}[1]{\oldvit*{#1}}
+
+\DeclarePairedDelimiter{\ug}{[}{]}
+\let\oldug\ug
+\renewcommand{\ug}[1]{\oldug*{#1}}
+
+\DeclarePairedDelimiter{\ob}{(}{)}
+\let\oldob\ob
+\renewcommand{\ob}[1]{\oldob*{#1}}
+
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\let\oldabs\abs
+\renewcommand{\abs}[1]{\oldabs*{#1}}
+
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\let\oldnorm\norm
+\renewcommand{\norm}[1]{\oldnorm*{#1}}
+\newcommand{\dnorm}{\norm{\, \cdot \,}}
+
+\DeclarePairedDelimiter{\skp}{\langle}{\rangle}
+\let\oldskp\skp
+\renewcommand{\skp}[1]{\oldskp*{#1}}
+
+\DeclarePairedDelimiter{\oo}{\langle}{\rangle}
+\let\oldoo\oo
+\renewcommand{\oo}[1]{\oldoo*{#1}}
+
+\DeclarePairedDelimiter{\oc}{\langle}{]}
+\let\oldoc\oc
+\renewcommand{\oc}[1]{\oldoc*{#1}}
+
+\DeclarePairedDelimiter{\co}{[}{\rangle}
+\let\oldco\co
+\renewcommand{\co}[1]{\oldco*{#1}}
+
+\DeclarePairedDelimiter{\cc}{[}{]}
+\let\oldcc\cc
+\renewcommand{\cc}[1]{\oldcc*{#1}}
+
+
+\newcommand{\up}[1]{\mathrm{#1}}
+\renewcommand{\cal}[1]{\mathcal{#1}}
+
+\newcommand{\pd}{\subseteq}
+\newcommand{\nd}{\supseteq}
+
+\newcommand{\rz}{\setminus}
+
+\renewcommand{\le}{\leqslant}
+\renewcommand{\ge}{\geqslant}
+
+\newcommand{\ime}[2]{\, {#1}({\mathrm d {#2}})}
+
+\newcommand{\io}{\ \text{i.o.}}
+\newcommand{\ult}{\ \text{ult.}}
+
+\newcommand{\whi}{; \,}
+\newcommand{\zerone}{\( 0 \)-\( 1 \)}
+\newcommand{\mii}{_{-\infty}^\infty}
+\newcommand{\nderi}[1]{^{(#1)}}
+
+\newcommand{\implybox}[2]{\fbox{\emph{ ({#1}) \( \implies \) ({#2}) }}}
+
+\newcommand\restr[2]{{% we make the whole thing an ordinary symbol
+  \left.\kern-\nulldelimiterspace % automatically resize the bar with \right
+  #1 % the function
+  \vphantom{\big|} % pretend it's a little taller at normal size
+  \right|_{#2} % this is the delimiter
+  }}
+
+\newcommand\neza{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+%%
+%
+\makeatletter
+\DeclareRobustCommand{\lasymp}{\lg@asymp{<}}
+\DeclareRobustCommand{\gasymp}{\lg@asymp{>}}
+
+\newcommand{\under@asymp}[1]{\clipbox{0pt 0pt 0pt {0.5\height}}{$\m@th#1\asymp$}}
+\newcommand{\lg@asymp}[1]{\mathrel{\mathpalette\lg@asymp@{#1}}}
+\newcommand{\lg@asymp@}[2]{%
+  \vcenter{%
+    \offinterlineskip
+    \m@th
+    \ialign{%
+      \hfil##\hfil\cr
+      $#1#2$\cr
+      \under@asymp{#1}\cr
+    }%
+  }%
+}
+\makeatother
+
+%% specificno za fajl
+\newcommand{\sal}{\( \sigma \)-algebra}
+%%
+
+
+%\newcommand{\distr}[3]{\left\{ x \in {#1} \st \left| {#2}(x) \right| \ge {#3} \right\}}
+% \newcommand{\abs}[1]{\left| {#1} \right|}
+% \newcommand{\fave}[2]{\left\langle {#1} \right\rangle_{#2}}
+\let\etoolboxforlistloop\forlistloop % save the good meaning of \forlistloop
+\usepackage{autonum}
+\let\forlistloop\etoolboxforlistloop % restore the good meaning of \forlistloopi
+
+\newcommand{\asteriskline}{
+\vskip20pt
+\centerline{
+\Large{
+\textasteriskcentered\hspace{.1em}
+\raisebox{.87ex}\textasteriskcentered\hspace{.1em}
+\textasteriskcentered
+}}
+\vskip20pt
+}
+
+\newcommand{\astfootnote}[1]{%
+\let\oldthefootnote=\thefootnote%
+\setcounter{footnote}{0}%
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}%
+\footnote{#1}%
+\let\thefootnote=\oldthefootnote%
+}
+
+\begin{document}
+\pagenumbering{gobble}
+\title{Notes on two walks with noncollinear drifts}
+% \author{Luka Šimek}
+% \date{\today}
+
+%\date{\today}
+\maketitle
+% \vspace{-5em}
+% \begin{flushleft}
+% 	These materials...
+% \end{flushleft}
+% \vspace{-.5em}
+
+
+% \vspace{.25em}  % Add some space before signature?
+%\tableofcontents
+%\newpage
+\pagenumbering{arabic}
+
+We use the notation:
+\begin{itemize}
+	\item polar form of the walk: \( S_k\nderi j = \norm {S_k \nderi j} e_{ \varphi_k\nderi j  } \); then
+	      \begin{equation}
+		      \skp{S_k \nderi j, e_\theta} = \norm{S_k \nderi j} \cos \ob{\varphi_k \nderi j - \theta}
+	      \end{equation}
+	\item for the index \( k \) where the max of \( \skp {S_k\nderi j, e_\theta} \) is achieved, we write \( k^*(\theta, n, j) \coloneq k \)
+	      % \item \( Q_j \) for quadrants of \( \R^2 \).
+\end{itemize}
+
+\section{Lemmas}
+By the SLLN, all points \( S_k\nderi 1 \) for \( k \ge n \) where \( n=n(\omega, \delta) \) is a random and a.s.\ finite \( \in \N \)
+are contained in the cone
+\begin{equation}\label{eq:cone1}
+	\up{Co}\nderi1 = \vit{ r e_\theta \st r \ge 0, \ \theta \in \oo{\frac\pi4 - \delta, \frac\pi4 + \delta} }
+\end{equation}
+and likewise for the second walk.
+
+\begin{lemma}\label{lm:21}
+	A.s.\ for large enough \( n \)
+	it holds that
+	\begin{equation}
+		S_{k^*(\theta, n, 1)}\nderi 1 \in \up{Co}\nderi 1, \quad \forall
+		\theta \in \oo{-\frac\pi4+2\delta, \frac{3\pi}4-2\delta  },
+	\end{equation}
+
+\end{lemma}
+
+\begin{proof}
+	Write
+	\begin{equation}\label{eq:max12}
+		\begin{gathered}
+			\max_{1 \le m \le n} \skp{S_m \nderi 1, e_\theta} =
+			\max \vit{\max_{S_m \nderi 1 \not \in \up{Co} \nderi 1} \skp{S_m \nderi 1, e_\theta}, \max_{S_m \nderi 1\in \up{Co} \nderi 1} \skp{S_m \nderi 1, e_\theta} }
+		\end{gathered}
+	\end{equation}
+	The first part of~\eqref{eq:max12} will a.s.\ at some point remain constant, and can therefore be bounded by the maximum of norms (making it independent of \( \theta \) as well as \( n \)).
+
+	For the second part note first
+	\begin{equation}
+		\skp {S_m \nderi 1, e_\theta } = \norm{S_m \nderi 1} \cos \ob{\theta - \varphi_m \nderi 1}.
+	\end{equation}
+	When \( S_m \nderi 1 \in \up{Co}\nderi 1 \) we have \( \cos \ob{\theta - \varphi_m \nderi 1} > 0 \) and \( \norm{S_m \nderi 1} \konvas \infty \)
+	meaning that the maximum in~\eqref{eq:max12} is a.s.\ always generated by the second part for large \( n \).
+
+	Moreover,
+	\begin{equation}\label{eq:strposcon}
+		\cos \ob{\theta - \varphi_m \nderi 1} > \cos \ob{-\frac \pi 2 + \delta}
+	\end{equation}
+	which is a strictly positive constant, meaning that we can choose an \( n \) which
+	is \enquote{good} for all such \( \theta \) simultaneously.
+\end{proof}
+
+\begin{note}\label{n1}
+	% s manjim intervalom
+	When
+	\begin{equation}
+		\theta \in \oo{-\frac \pi 4 + \delta, \frac \pi 4 - \delta },
+	\end{equation}
+	we cannot repeat the same argument, as the RHS in~\eqref{eq:strposcon} is \( 0 \).
+\end{note}
+
+\begin{note}\label{n2}
+	For any fixed \( \theta \in \oo{-\pi/4, 3\pi/4} \) we can retroactively choose a small enough \( \delta \) to claim \( S_{k^*(\theta,n,1)} \in \up{Co}\nderi 1  \) a.s.\ for large enough \( n \), but we cannot do so for all \( \theta \) simultaneously.
+\end{note}
+
+\begin{note}\label{n3}
+	Whenever \( \theta \) is instead such that \( \cos \ob{\theta - \varphi_m \nderi 1} < 0 \) inside the cone, the maximum
+	is generated either by \( 0 \) or by a point outside the cone, meaning that the maximum a.s.\ eventually \enquote{freezes}. To make the analogous claim to lemma~\ref{lm:21}
+	% the simpler
+	\begin{equation}
+		\theta \in \oo{ \frac{3\pi}4 + \delta , \frac{7\pi}4 -\delta \equiv -\frac \pi4-\delta}
+	\end{equation}
+	is enough, since the \( \skp{S_n \nderi 1, e_\theta} \) become negative for large enough \( n \), and
+	the magnitude of the cosine (and therefore \( \theta \) itself) plays no part here.
+\end{note}
+
+\section{Main part}
+Consider the limiting behaviour of the integral
+\begin{equation}\label{eq:intmaincijeli}
+	\frac 1{n^{3/2}} \int_0^{\pi} \ug{M_{n,2}(\theta)^2 - M_{n,1}(\theta)^2 } \cdot 1_{\vit{M_{n,1}(\theta) < M_{n,2}(\theta)}} \D \theta.
+\end{equation}
+
+\emph{For \( \theta \in \cc{\varepsilon, \pi/4 + \delta} \).} We can bound the indicator uniformly in \( \theta \) using
+\begin{equation}
+	\vit{M_{n,1}(\theta) < M_{n,2}(\theta)} \pd
+	\vit{\min_{\theta \in \cc{\varepsilon, \pi/4 + \delta}} M_{n,1}(\theta)
+		< \max_{\theta \in \cc{\varepsilon, \pi/4 + \delta}} M_{n,2}(\theta)}, \quad \forall \theta \in \cc{\varepsilon, \pi/4 + \delta}.
+\end{equation}
+For \( n \) large enough in the sense of lemma~\ref{lm:21} for both walks we claim:
+\begin{equation}
+	\min_{\theta \in \cc{\varepsilon, \pi/4+\delta}} M_{n,1}(\theta) = M_{n,1}(\varepsilon), \quad
+	\max_{\theta \in \cc{\varepsilon, \pi/4+\delta}} M_{n,2}(\theta) = M_{n,2}(\varepsilon).
+\end{equation}
+
+We give the proof for the first walk. Assuming the contrary, there is a \( \theta > \varepsilon \)
+and indices \( j,k \) generating maxima for \( \theta, \varepsilon \) respectively such that
+\begin{equation}
+	\skp{S_j \nderi 1, e_\theta} < \skp{S_k \nderi 1, e_\varepsilon}.
+\end{equation}
+But then
+\begin{equation}
+	\skp {S_k \nderi 1,  e_\theta} \le \skp{S_j \nderi 1, e_\theta} < \skp{S_k \nderi 1, e_\varepsilon}
+\end{equation}
+implying
+\begin{equation}
+	\cos \ob{\varphi_k \nderi 1 - \theta} < \cos \ob{\varphi_k \nderi 1 - \varepsilon}
+\end{equation}
+yielding a contradiction since \( \varphi_k \nderi 1 \) corresponds to the cone \( \up{Co} \nderi1 \).
+
+Since by the SLLN
+\begin{equation}
+	1_{\vit{M_{n,1}(\varepsilon) < M_{n,2}(\varepsilon)}} \konvas 0, \quad \forall \varepsilon > 0,
+\end{equation}
+this proves convergence a.s.\ to \( 0 \).
+The proof for the second walk is analogous.\footnote{
+	note that to apply lemma~\ref{lm:21} we'd need
+	the upper endpoint to be \( \pi/4-2\delta \) instead. However, for this proof
+	to work we only need the result at the fixed \( \theta = \varepsilon \). The upper
+	endpoint \( \pi/4+\delta \) is chosen for the sake of the next part.}
+
+\emph{For \( \theta \in \cc{0,\varepsilon} \)}. Note that above we've also shown that
+\begin{equation}
+	\theta \mapsto M_{n,1}(\theta)
+\end{equation}
+is increasing on the domain \( \cc{0, \varepsilon} \) (a.s.\ for a large-enough random \( n \)).
+We prove \( \L^1 \)-convergence.
+
+\emph{For \( \theta \in \oc{\pi/4+\delta, \pi} \)} Here \( M_{n,2}(\theta) \) will a.s.\ freeze (at the same time for all \( \theta \)), so simply
+\begin{equation}
+	M_{n,2}(\theta)^2  - M_{n,1}(\theta)^2
+	\le M_{n,2}(\theta)^2 \le \max_{S_m \nderi 2 \not \in \up{Co} \nderi 2} \norm{S_m \nderi 2}^2,
+	\quad \text{on}\quad \vit{M_{n,1}(\theta) < M_{n,2}(\theta)}
+\end{equation}
+makes a.s.\ convergence to \( 0 \) under \( n^{-3/2} \) scaling obvious.
+
+\emph{For \( \theta \in \oc{-\pi,0} \)}, the situation is symmetrical to the previous 3 points.
+
+\section{Derivatives}
+Writing \( S_n \) for a generic walk, Pythagoras' theorem gives
+\begin{equation}
+	\norm {S_{k^*(\theta, n)}}^2 = M_n(\theta) ^2 + M_n'(\theta)^2,
+\end{equation}
+meaning that
+\begin{equation}
+	M'_{n,2}(\theta)^2 - M'_{n,1}(\theta)^2 =
+	\ug{ \norm{S_{k^*(\theta,n,2)} \nderi 2}^2 - \norm{S_{k^*(\theta,n,1)} \nderi 1} ^2 } -
+	\ug{M_{n,2}(\theta)^2 - M_{n,1}(\theta)^2}
+\end{equation}
+
+The norms can be bounded using \( M_n \). First note
+\begin{equation}
+	\norm { S_{k^*(\theta, n, 1)}\nderi 1 } =
+	\frac{M_{n, 1}(\theta)}{\cos \ob{\theta - \varphi_{k^*(\theta, n, 1)}\nderi1 }}
+\end{equation}
+For example when
+\( \theta \in \oo{0,\varepsilon} \) we can guarantee
+\begin{equation}
+	\varphi_{k^*(\theta, n, 1)} \nderi1  -\theta \in \oo{\frac\pi4 - \delta - \varepsilon, \frac\pi4 + \delta}
+\end{equation}
+(again using lemma~\ref{lm:21}). Doing the same for the second walk we conclude
+\begin{equation}
+	\norm{S_{k^*(\theta,n,2)}\nderi2} +
+	\norm{S_{k^*(\theta,n,1)}\nderi1}
+	\lasymp_{\delta, \varepsilon}
+	M_{n,2}(\theta) + M_{n,1}(\theta).
+\end{equation}
+Thus when bounding the sum, the previous results are sufficient from here.
+
+We cannot do the same for the difference
+\begin{equation}
+	\norm{S_{k^*(\theta,n,2)}\nderi2} -
+	\norm{S_{k^*(\theta,n,1)}\nderi1}
+\end{equation}
+as the bounds will then yield, for positive real numbers \( a > b \)
+\begin{equation}
+	a \norm2 - b\norm1 = b \ob{\norm 1-\norm 2} + (a-b)\norm 2
+\end{equation}
+which is \( O(n) \).
+
+Instead,
+\newcommand{\Sj}[1]{S_{k^*(\theta,n,#1)}\nderi#1}
+\begin{align}
+	\norm{\Sj2} - \norm{\Sj1} =
+	\ob{\norm{S_n \nderi 2} - \norm{S_n \nderi 1} }
+	+ \ob{\norm{\Sj2} - \norm{S_n \nderi 2}} -
+	\ob{\norm{\Sj1} - \norm{S_n \nderi 1}}
+\end{align}
+Intuitively,
+\begin{itemize}
+	\item the 1st part will be \( O(\sqrt n) \) as the drifts have the same magnitudes
+	      and these cancel each other out;
+	\item the 2nd and 3rd part don't grow with \( n \), they should be
+	      \( O(1) \).
+\end{itemize}
+
+If there is a need to remove dependence on \( \theta \), consider the
+following. We'd expect the vertex with the maximal norm to \enquote{win}, but another
+vertex with a smaller norm but larger cosine could also win. Suppose we make the angle
+\( \theta \) larger; both cosines will increase, but the smaller cosine will increase
+relatively more.\footnote{
+	Suppose \( -\pi/2 < \alpha < \beta < -\varepsilon \); we claim that
+	\begin{equation}
+		\frac{\cos (\alpha + \varepsilon)}{\cos \alpha} >
+		\frac{\cos (\beta + \varepsilon)}{\cos \beta}.
+	\end{equation}
+	We know that the derivative of \( \cos \) is decreasing, so
+	\begin{equation}
+		\frac{\cos (\alpha + \varepsilon) - \cos \alpha}{\varepsilon}
+		> \frac{\cos (\beta + \varepsilon) - \cos \beta}{\varepsilon}   .
+	\end{equation}
+	We can use this in
+	\begin{align}
+		\frac{\cos(\alpha + \varepsilon)}{\cos \alpha} - 1
+		= \frac{\cos(\alpha + \varepsilon) - \cos \alpha}{\cos \alpha} >
+		\frac{\cos(\beta + \varepsilon) - \cos \beta}{\cos \alpha} >
+		\frac{\cos(\beta + \varepsilon) - \cos \beta}{\cos \beta}=
+		\frac{\cos(\beta + \varepsilon)}{\cos \beta} - 1.
+	\end{align}
+}
+Therefore, the larger norms only gain more of an advantage as \( \theta \) increases, so
+\begin{equation}
+	\theta \mapsto \norm{\Sj 1}, \quad \theta \in \cc{0, \varepsilon}
+\end{equation}
+is increasing. With the analogous claim for the second walk,
+\begin{equation}
+	\theta \mapsto \norm{\Sj 2} - \norm{\Sj 1}, \quad
+	\theta \in \cc{0, \varepsilon}
+\end{equation}
+is maximal for \( \theta=0 \).
+
+To summarise this section:
+\begin{itemize}
+	\item on \( \cc{0, \varepsilon} \), we use the above;
+	\item elsewhere, the arguments are almost the same as in the previous section.
+\end{itemize}
+
+\end{document}
